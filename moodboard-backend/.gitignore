@@ -3,9 +3,11 @@ node_modules/
 
 # Build output: Compiled JavaScript and other build artifacts
 dist/
+build/
 
 # Environment variables: Hide sensitive configuration files
 .env
+.env.*
 
 # Logs: Ignore log files
 *.log
@@ -27,7 +29,18 @@ Thumbs.db
 *.ntvs*
 *.njsproj
 *.sln
+*.iml
 
 # Temporary files
 tmp/
 temp/
+
+# React Native & Expo specific
+.expo/
+.expo-shared/
+android/app/build/
+ios/build/
+ios/Pods/
+
+# SQL files
+sql/init.sql
