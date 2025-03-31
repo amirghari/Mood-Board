@@ -14,7 +14,7 @@ function ListingDetailsScreen(props: any) {
                 <AppText style={styles.mood}>Hiegr</AppText>
                 <View style={styles.userContainer}>
                     <ListItem 
-                        image={require("../assets/background.jpg")}
+                        image={require("../assets/user.png")}
                         title="Amirghari"
                         subTitle="5 Journals"
                     />
@@ -27,7 +27,7 @@ function ListingDetailsScreen(props: any) {
 const styles = StyleSheet.create({
     image: {
         width: '100%',
-        height: 300,
+        height: 340,
         resizeMode: 'cover'
     },
     detailContainer: {
