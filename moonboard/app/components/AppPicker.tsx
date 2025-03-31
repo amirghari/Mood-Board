@@ -1,40 +1,61 @@
 import React from 'react';
-import { View , StyleSheet, TouchableWithoutFeedback, Modal, Button, FlatList} from 'react-native';
+import { View , StyleSheet, TouchableWithoutFeedback, Modal, FlatList} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 
 import Screen from './Screen';
 import colors from '../config/colors';
 import AppText from './AppText';
-import PickerItem from './PickerItem';
+import PickerItem, { Props as PickerItemProps } from './PickerItem';
+import AppButton from './AppButton';
 
 interface Props {
     icon?: keyof typeof MaterialCommunityIcons.glyphMap;
     [key: string]: any;
     placeholder: string;
-    items: {label: string, value: number}[];
-    onSelectItem: (item: {label: string, value: number}) => void;
-    selectedItem?: {label: string, value: number};
+    PickerItemComponent: React.ComponentType<PickerItemProps>;
+    items: {
+        label: string;
+        value: number;
+        backgroundColor: string;
+        icon: keyof typeof MaterialCommunityIcons.glyphMap;
+    }[];
+    onSelectItem: (item: {
+        label: string;
+        value: number;
+        backgroundColor: string;
+        icon: keyof typeof MaterialCommunityIcons.glyphMap;
+    }) => void;
+    selectedItem?: {
+        label: string;
+        value: number;
+        backgroundColor: string;
+        icon: keyof typeof MaterialCommunityIcons.glyphMap;
+    };
 }
 
-function AppPicker({icon, placeholder, items, onSelectItem, selectedItem}: Props) {
+function AppPicker({icon, placeholder, items, onSelectItem, selectedItem, PickerItemComponent = PickerItem }: Props) {
     const [modalVisible, setModalVisible] = useState(false);
     return (
         <>
             <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
                 <View style={styles.container}>
                     <MaterialCommunityIcons name={icon} size={20} color={colors.medium} style={styles.icon} />
-                    <AppText style={styles.text}>{selectedItem ? selectedItem.label : placeholder}</AppText>
+                    {selectedItem ? (
+                        <AppText style={styles.text}>{selectedItem.label}</AppText>
+                    ) : (
+                        <AppText style={styles.placeholder}>{placeholder}</AppText>
+                    )}
                     <MaterialCommunityIcons name="chevron-down" size={20} color={colors.medium} style={styles.icon} />
                 </View>
             </TouchableWithoutFeedback>
             <Modal visible={modalVisible} animationType='slide'>
-                <Screen>
-                    <Button title='Close' onPress={() => setModalVisible(false)} />
+                <Screen style={styles.modal}>
+                    <AppButton title='Close' onPress={() => setModalVisible(false)} color="secondary" />
                     <FlatList
                         data={items}
                         keyExtractor={item => item.value.toString()}
-                        renderItem={({item}) => <PickerItem item={item.label} onPress={() => {
+                        renderItem={({item}) => <PickerItemComponent item={item} onPress={() => {
                             setModalVisible(false);
                             onSelectItem(item);
                         }} />}
@@ -59,6 +80,13 @@ const styles = StyleSheet.create({
     },
     text: {
         flex: 1
+    },
+    placeholder: {
+        flex: 1,
+        color: colors.medium
+    },
+    modal: {
+        marginHorizontal: 20
     }
 })
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import  text  from '../config/styles';   
 
 import colors from '../config/colors';
 
@@ -14,7 +15,7 @@ interface Props {
 function AppButton({ title, onPress, color }: Props) {
     return (
         <TouchableOpacity style={[styles.button, {backgroundColor: colors[color]}]} onPress={onPress}>
-            <Text style={styles.text}>{title}</Text>
+            <Text style={[text.text, { color: colors.white }]}>{title}</Text>
         </TouchableOpacity>
     );
 }
@@ -30,12 +31,6 @@ const styles = StyleSheet.create({
         width: '100%',
         marginVertical: 10,
     },
-    text: {
-        color: colors.white,
-        fontSize: 18,
-        textTransform: "uppercase",
-        fontWeight: "bold"
-    }
 });
 
 export default AppButton;

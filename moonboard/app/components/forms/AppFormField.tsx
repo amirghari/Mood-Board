@@ -1,9 +1,8 @@
 import React from 'react';
 import { useFormikContext } from 'formik';
-import { StyleSheet } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, AntDesign  } from '@expo/vector-icons';
 
-import AppTextInput from './AppTextInput';
+import AppTextInput from '../AppTextInput';
 import ErrorMessages from './ErrorMessages';
 
 interface FormValues {
@@ -16,13 +15,13 @@ interface Props {
     [key: string]: any;
 }
 
-function AppFormField({ name, icon = "email", ...otherProps }: Props) {  
+function AppFormField({ name, icon, ...otherProps }: Props) {  
     const { setFieldTouched, handleChange, errors, touched } = useFormikContext<FormValues>();
 
     return (
         <>
             <AppTextInput
-                icon={icon}
+                icon={icon || "email"}
                 onChangeText={handleChange(name)}
                 onBlur={() => setFieldTouched(name)}
                 {...otherProps}

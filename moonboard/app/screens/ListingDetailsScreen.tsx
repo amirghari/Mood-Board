@@ -4,10 +4,19 @@ import { View, Image, StyleSheet } from 'react-native';
 import ListItem from '../components/ListItem';
 import AppText from '../components/AppText';
 import colors from '../config/colors';
+import AppButton from '../components/AppButton';
+import Screen from '../components/Screen';
 
-function ListingDetailsScreen(props: any) {
+interface Props {
+    onBack: () => void;
+}
+
+function ListingDetailsScreen({ onBack }: Props) {
     return (
-        <View>
+        <Screen>
+            <View style={styles.container}>
+                <AppButton title="Back" onPress={onBack} color="primary" />
+            </View>
             <Image style={styles.image} source={require("../assets/background.jpg")}/>
             <View style={styles.detailContainer}>
                 <AppText style={styles.title}>xxx</AppText>
@@ -20,7 +29,7 @@ function ListingDetailsScreen(props: any) {
                     />
                 </View>
             </View>
-        </View>
+        </Screen>
     );
 }
 
@@ -47,6 +56,9 @@ const styles = StyleSheet.create({
     },
     userContainer: {
         marginVertical: 50,
+    },
+    container: {
+        padding: 10,
     }
 });
 

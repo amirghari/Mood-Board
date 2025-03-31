@@ -24,8 +24,11 @@ const menuItems = [
     }
 ];
 
+interface Props {
+    onEdit: () => void;
+}
 
-function AccountScreen(props: any) {
+function AccountScreen({ onEdit }: Props) {
     return (
         <Screen>
             <View style={styles.container}>
@@ -50,6 +53,7 @@ function AccountScreen(props: any) {
                                     backgroundColor={item.icon.backgroundColor}
                                 />
                             )}
+                            onPress={onEdit}
                         />
                     )}
                 />

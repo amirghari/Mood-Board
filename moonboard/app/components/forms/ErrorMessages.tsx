@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ErrorMessageProps } from 'formik';
 
-import AppText from './AppText';
+import AppText from '../AppText';
 
 interface Props {
     error: string;

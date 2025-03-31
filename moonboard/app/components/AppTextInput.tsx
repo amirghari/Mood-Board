@@ -13,7 +13,7 @@ function AppTextInput({icon, ...otherProps}: Props) {
     return (
         <View style={styles.container}>
             <MaterialCommunityIcons name={icon} size={20} color={colors.medium} style={styles.icon} />
-            <TextInput style={defaultStyles.text} {...otherProps}  />
+            <TextInput placeholderTextColor={colors.medium} style={[defaultStyles.text, styles.textInput]} {...otherProps}  />
         </View>
     );
 }
@@ -25,10 +25,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         padding: 15,
-        marginVertical: 10
+        marginVertical: 10,
+        alignItems: 'center'
     },
     icon: {
         marginRight: 10
+    },
+    textInput: {
+        flex: 1
     }
 })
 
