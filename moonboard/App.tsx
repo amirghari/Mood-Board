@@ -12,13 +12,14 @@ import colors from './app/config/colors';
 import ListItem from './app/components/ListItem';
 import AccountScreen from './app/screens/AccountScreen';
 import Journals from './app/screens/Journals';
+import AppPicker from './app/components/AppPicker';
+import { useState } from 'react';
+import LoginScreen from './app/screens/LoginScreen';
 
 export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Screen>
-        <AppTextInput icon="email" placeholder="Email" />
-      </Screen>
+      <LoginScreen />
     </GestureHandlerRootView>
   );
 }
