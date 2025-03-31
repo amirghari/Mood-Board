@@ -39,6 +39,7 @@ function Journals(props: any) {
 const styles = StyleSheet.create({
     screen: {
         marginHorizontal: 10,
+        backgroundColor: colors.light
     }
 })
 

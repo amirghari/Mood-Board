@@ -2,6 +2,7 @@ import WelcomeScreen from './app/screens/WelcomeScreen';
 import ViewImageScreen from './app/screens/ViewImageScreen';
 import { View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import AppTextInput from './app/components/AppTextInput';
 
 import Card from './app/components/Card';
 import ListingDetailsScreen from './app/screens/ListingDetailsScreen';
@@ -15,7 +16,9 @@ import Journals from './app/screens/Journals';
 export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Journals />
+      <Screen>
+        <AppTextInput icon="email" placeholder="Email" />
+      </Screen>
     </GestureHandlerRootView>
   );
 }
