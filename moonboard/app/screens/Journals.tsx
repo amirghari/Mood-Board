@@ -100,7 +100,13 @@ export default function Journals({ token, onSelectJournal, user }: Props) {
         keyExtractor={(journal) => journal.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => onSelectJournal(item)}>
-            <Card title={item.title} subTitle={item.mood} image={item.image} />
+            <Card 
+              title={item.title} 
+              subTitle={item.mood} 
+              image={item.image}
+              username={item.username || 'Anonymous'}
+              date={new Date(item.created_at).toLocaleDateString()}
+            />
           </TouchableOpacity>
         )}
       />
