@@ -8,7 +8,7 @@ const router = Router();
 
 // Register a new user
 router.post('/register', (async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, name } = req.body;
     try {
         const existingUser = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
         if (existingUser.rows.length > 0) {
@@ -17,13 +17,13 @@ router.post('/register', (async (req, res) => {
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         const newUser = await pool.query(
-            'INSERT INTO users (username, hashed_password) VALUES ($1, $2) RETURNING *',
-            [username, hashedPassword]
+            'INSERT INTO users (username, hashed_password, name) VALUES ($1, $2, $3) RETURNING *',
+            [username, hashedPassword, name]
         );
         const token = jwt.sign({ id: newUser.rows[0].id }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
         res.status(201).json({ token, user: newUser.rows[0] });
     } catch (error) {
-        console.error(error);
+        console.error('Register error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 }) as RequestHandler);
