@@ -6,7 +6,6 @@ import colors from '../config/colors';
 import defaultStyles from '../config/styles';
 interface Props {
     icon: keyof typeof MaterialCommunityIcons.glyphMap;
-    style?: any;
     [key: string]: any;
 }
 

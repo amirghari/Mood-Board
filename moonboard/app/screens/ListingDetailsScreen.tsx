@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     color: colors.medium,
     position: 'absolute',
     bottom:-20 ,
-    left: 50
+    left: 60
   },
   userContainer: {
     marginVertical: 20,

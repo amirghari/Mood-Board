@@ -28,7 +28,7 @@ interface Props {
 
 function AccountScreen({ onUserJournals, onLogout, user }: Props) {
   return (
-    <Screen>
+    <Screen style={styles.screen}>
       <View style={styles.container}>
         <ListItem 
           title={user.name}
@@ -38,6 +38,7 @@ function AccountScreen({ onUserJournals, onLogout, user }: Props) {
       </View>
       <View style={styles.container}>
         <FlatList
+          style={styles.list}
           data={menuItems}
           keyExtractor={item => item.title}
           ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
@@ -51,7 +52,7 @@ function AccountScreen({ onUserJournals, onLogout, user }: Props) {
                   backgroundColor={item.icon.backgroundColor}
                 />
               )}
-              onPress={onUserJournals} // Press => go to MyJournals with user prop
+              onPress={onUserJournals}
             />
           )}
         />
@@ -69,8 +70,16 @@ function AccountScreen({ onUserJournals, onLogout, user }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container : {
+  screen: {
+    backgroundColor: colors.white,
+    flex: 1,
+  },
+  container: {
     marginVertical: 20,
+    backgroundColor: colors.white,
+  },
+  list: {
+    backgroundColor: colors.white,
   },
 });
 

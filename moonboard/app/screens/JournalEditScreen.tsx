@@ -1,6 +1,6 @@
 // app/screens/JournalEditScreen.tsx
 import React from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 import * as Yup from 'yup';
 import Screen from '../components/Screen';
 import { AppForm, AppFormField, SubmitButton, AppFormPicker } from '../components/forms';
@@ -10,7 +10,6 @@ import colors from '../config/colors';
 import { useJournal } from '../hooks/useJournal';
 import CategoryPickerItem from '../components/CategoryPickerItem';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import BackButton from '../components/BackButton';
 
 
 const moods = [
@@ -25,12 +24,6 @@ const moods = [
 // Transform the "mood" field: if it's an object, extract its "value" property.
 const validationSchema = Yup.object().shape({
   title: Yup.string().required('Title is required').min(1).label('Title'),
-  mood: Yup.string()
-    .transform((value, originalValue) => {
-      return typeof originalValue === 'object' && originalValue !== null ? originalValue.value : originalValue;
-    })
-    .required('Mood is required')
-    .label('Mood'),
   entry_text: Yup.string().required('Entry text is required').min(10).label('Entry'),
   is_private: Yup.boolean(),
 });
@@ -45,15 +38,38 @@ export default function JournalEditScreen({ onBack, token }: Props) {
 
   const handleSubmit = async (values: {
     title: string;
-    mood: any; // Could be an object or string; validation will transform it.
+    mood: any;
     entry_text: string;
     is_private: boolean;
   }) => {
     console.log('JournalEditScreen: Form submitted:', values);
     try {
-      // If needed, you can still process the mood field; however, validation should have transformed it.
-      const processedMood =
-        typeof values.mood === 'object' && values.mood !== null ? values.mood.value : values.mood;
+      const moodValue = values.mood?.value;
+      let processedMood = '';
+      
+      switch(moodValue) {
+        case 1:
+          processedMood = 'Happy';
+          break;
+        case 2:
+          processedMood = 'Sad';
+          break;
+        case 3:
+          processedMood = 'Angry';
+          break;
+        case 4:
+          processedMood = 'Excited';
+          break;
+        case 5:
+          processedMood = 'Neutral';
+          break;
+        case 6:
+          processedMood = 'Stressed';
+          break;
+        default:
+          processedMood = '';
+      }
+
       const newJournal = await postJournal(
         values.title,
         processedMood,
@@ -70,10 +86,7 @@ export default function JournalEditScreen({ onBack, token }: Props) {
 
   return (
     <Screen style={styles.container}>
-      <View style={styles.header}>
-        <BackButton onPress={onBack} />
-        <AppText style={styles.title}>New Journal Entry</AppText>
-      </View>
+      <AppText style={styles.title}>New Journal Entry</AppText>
       <AppForm
         initialValues={{
           title: '',
@@ -116,18 +129,12 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     marginHorizontal: 10,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
+    },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 20,
     textAlign: 'center',
-    flex: 1,
-    marginRight: 40, // To center the title accounting for the back button
   },
   error: {
     color: colors.danger,

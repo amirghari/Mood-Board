@@ -4,7 +4,8 @@ import { MaterialCommunityIcons, AntDesign  } from '@expo/vector-icons';
 
 import AppTextInput from '../AppTextInput';
 import ErrorMessages from './ErrorMessages';
-
+import colors from '../../config/colors';
+import { StyleSheet } from 'react-native';
 interface FormValues {
     [key: string]: string;
 }
@@ -30,5 +31,11 @@ function AppFormField({ name, icon, ...otherProps }: Props) {
         </>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: colors.white,
+    }
+})
 
 export default AppFormField;
