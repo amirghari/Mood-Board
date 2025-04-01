@@ -21,9 +21,9 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
 });
 
 // Create a new journal entry
-router.post('/', async (req: Request, res: Response) => {
-    // For testing, use a dummy user ID if not provided
-    const userId = (req as any).userId || 1;
+router.post('/', verifyToken, async (req: Request, res: Response) => {
+    // Now that verifyToken is attached, req.userId should contain the correct user id
+    const userId = (req as any).userId;
     const { title, mood, entry_text, is_private } = req.body;
     console.log('Journal POST: Received values:', { userId, title, mood, entry_text, is_private });
     
@@ -36,8 +36,6 @@ router.post('/', async (req: Request, res: Response) => {
       res.status(201).json(newJournal.rows[0]);
     } catch (error: any) {
       console.error('Journal POST: Server error:', error);
-      // Log the full error object as JSON
-      console.error('Detailed error:', JSON.stringify(error, null, 2));
       res.status(500).json({ message: 'Server error', error: error.message });
     }
   });

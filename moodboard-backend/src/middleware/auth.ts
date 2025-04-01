@@ -1,21 +1,23 @@
-// src/middleware/auth.ts
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
 
-export const verifyToken: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    // Expect the token to be sent in the Authorization header as "Bearer <token>"
-    const token = req.headers['authorization']?.split(' ')[1];
-    if (!token) {
-        res.status(401).json({ message: 'Access token missing' });
-        return;
-    }
-    try {
-        // Verify the token using the JWT secret from your .env file
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: number };
-        // Attach the user's id to the request for later use
-        (req as any).userId = decoded.id;
-        next();
-    } catch (error) {
-        res.status(401).json({ message: 'Invalid token' });
-    }
+export const verifyToken: RequestHandler = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) {
+    res.status(401).json({ message: 'Access token missing' });
+    return;
+  }
+  const token = authHeader.split(' ')[1]; // Expect format "Bearer <token>"
+  if (!token) {
+    res.status(401).json({ message: 'Token format is invalid' });
+    return;
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: number };
+    (req as any).userId = decoded.id;
+    next();
+  } catch (error) {
+    console.error('Token verification error:', error);
+    res.status(401).json({ message: 'Invalid token' });
+  }
 };
