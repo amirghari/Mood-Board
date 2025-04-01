@@ -1,15 +1,13 @@
 // app/screens/Journals.tsx
 import React, { useState, useEffect } from 'react';
-import { FlatList, StyleSheet, ActivityIndicator, Text } from 'react-native';
+import { FlatList, StyleSheet, ActivityIndicator, Text, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import Screen from '../components/Screen';
 import Card from '../components/Card';
 import colors from '../config/colors';
 
-// Define your API URL (adjust if necessary)
 const API_URL = 'http://172.20.10.2:5001/api/journal';
 
-// Array of images to choose from
 const randomImages = [
   require('../assets/journal1.jpg'),
   require('../assets/journal2.jpg'),
@@ -21,7 +19,12 @@ const randomImages = [
   require('../assets/journal8.jpg'),
 ];
 
-export default function Journals(props: { token: string | null }) {
+interface Props {
+  token: string | null;
+  onSelectJournal: (journal: any) => void;
+}
+
+export default function Journals({ token, onSelectJournal }: Props) {
   const [journals, setJournals] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,10 +34,10 @@ export default function Journals(props: { token: string | null }) {
       try {
         const response = await axios.get(API_URL, {
           headers: {
-            Authorization: props.token ? `Bearer ${props.token}` : '',
+            Authorization: token ? `Bearer ${token}` : '',
           },
         });
-        // For each journal entry, if no image is provided, assign a random image
+        // Assign a random image to journals that have no image.
         const processedData = response.data.map((journal: any) => {
           if (!journal.image) {
             const randomIndex = Math.floor(Math.random() * randomImages.length);
@@ -52,7 +55,7 @@ export default function Journals(props: { token: string | null }) {
     };
 
     fetchJournals();
-  }, [props.token]);
+  }, [token]);
 
   if (loading) {
     return (
@@ -76,7 +79,9 @@ export default function Journals(props: { token: string | null }) {
         data={journals}
         keyExtractor={(journal) => journal.id.toString()}
         renderItem={({ item }) => (
-          <Card title={item.title} subTitle={item.mood} image={item.image} />
+          <TouchableOpacity onPress={() => onSelectJournal(item)}>
+            <Card title={item.title} subTitle={item.mood} image={item.image} />
+          </TouchableOpacity>
         )}
       />
     </Screen>

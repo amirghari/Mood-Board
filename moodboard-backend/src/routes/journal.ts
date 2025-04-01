@@ -8,12 +8,17 @@ const router = Router();
 // Get all journal entries for the logged-in user
 router.get('/', verifyToken, async (req: Request, res: Response) => {
     try {
-      const journals = await pool.query(
-        'SELECT * FROM journal_entries WHERE is_private = false ORDER BY created_at DESC'
-      );
+      const query = `
+        SELECT j.*, u.username, u.name 
+        FROM journal_entries j
+        JOIN users u ON j.user_id = u.id
+        WHERE j.is_private = false
+        ORDER BY j.created_at DESC
+      `;
+      const journals = await pool.query(query);
       res.status(200).json(journals.rows);
     } catch (error) {
-      console.error('Error fetching public journals:', error);
+      console.error(error);
       res.status(500).json({ message: 'Server error' });
     }
   });

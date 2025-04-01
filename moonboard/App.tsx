@@ -8,6 +8,7 @@ import LoginScreen from './app/screens/LoginScreen';
 import JournalEditScreen from './app/screens/JournalEditScreen';
 import AccountScreen from './app/screens/AccountScreen';
 import Journals from './app/screens/Journals';
+import ListingDetailsScreen from './app/screens/ListingDetailsScreen'; // New details screen
 import BottomMenu from './app/components/BottomMenu';
 import colors from './app/config/colors';
 
@@ -17,12 +18,25 @@ interface User {
   name: string;
 }
 
+interface Journal {
+  id: number;
+  title: string;
+  mood: string;
+  entry_text: string;
+  is_private: boolean;
+  created_at: string;
+  image?: any;
+  user_id: number;
+}
+
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState('welcome'); // 'welcome', 'login', 'journals', 'journal', 'account'
+  // possible currentScreen values: 'welcome', 'login', 'journals', 'listing', 'journal', 'account'
+  const [currentScreen, setCurrentScreen] = useState('welcome');
   const [isRegistering, setIsRegistering] = useState(false);
   const [activeTab, setActiveTab] = useState('feed');
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [selectedJournal, setSelectedJournal] = useState<Journal | null>(null);
 
   // Handle welcome screen actions
   const handleWelcomeAction = (action: 'login' | 'register') => {
@@ -53,7 +67,16 @@ export default function App() {
   const handleTabPress = (tab: string) => {
     console.log('App: handleTabPress called with:', tab);
     setActiveTab(tab);
-    setCurrentScreen(tab === 'feed' ? 'journals' : tab === 'plus' ? 'journal' : 'account');
+    setCurrentScreen(
+      tab === 'feed' ? 'journals' : tab === 'plus' ? 'journal' : 'account'
+    );
+  };
+
+  // Handle selecting a journal to view details
+  const handleSelectJournal = (journal: Journal) => {
+    console.log('App: Journal selected:', journal);
+    setSelectedJournal(journal);
+    setCurrentScreen('listing');
   };
 
   // Render the appropriate screen
@@ -68,31 +91,33 @@ export default function App() {
           />
         );
       case 'login':
+        return <LoginScreen onLogin={handleLogin} isRegistering={isRegistering} />;
+      case 'journals':
         return (
-          <LoginScreen
-            onLogin={handleLogin}
-            isRegistering={isRegistering}
+          <View style={styles.mainContainer}>
+            {/* Pass onSelectJournal prop so that when a card is pressed, it calls this callback */}
+            <Journals token={token} onSelectJournal={handleSelectJournal} />
+            <BottomMenu activeTab={activeTab} onTabPress={handleTabPress} />
+          </View>
+        );
+      case 'listing':
+        return (
+          <ListingDetailsScreen
+            journal={selectedJournal}
+            onBack={() => setCurrentScreen('journals')}
           />
         );
-      case 'journals':
       case 'journal':
+        return (
+          <View style={styles.mainContainer}>
+            <JournalEditScreen onBack={() => handleTabPress('feed')} token={token} />
+            <BottomMenu activeTab={activeTab} onTabPress={handleTabPress} />
+          </View>
+        );
       case 'account':
         return (
           <View style={styles.mainContainer}>
-            {currentScreen === 'journals' && <Journals token={token} />}
-            {currentScreen === 'journal' && (
-              <JournalEditScreen
-                onBack={() => handleTabPress('feed')}
-                token={token}
-              />
-            )}
-            {currentScreen === 'account' && (
-              <AccountScreen
-                onEdit={() => handleTabPress('plus')}
-                onLogout={handleLogout}
-                user={user}
-              />
-            )}
+            <AccountScreen onEdit={() => handleTabPress('plus')} onLogout={handleLogout} user={user} />
             <BottomMenu activeTab={activeTab} onTabPress={handleTabPress} />
           </View>
         );
