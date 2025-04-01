@@ -12,7 +12,7 @@ const menuItems = [
     title: "My Journals",
     icon: {
       name: "format-list-bulleted" as keyof typeof MaterialCommunityIcons.glyphMap,
-      backgroundColor: colors.primary
+      backgroundColor: colors.secondary
     }
   }
 ];
@@ -61,7 +61,7 @@ function AccountScreen({ onUserJournals, onLogout, user }: Props) {
         title='Log Out'
         subTitle=""
         IconComponent={() => (
-          <Icon name='logout' backgroundColor={colors.secondary} />
+          <Icon name='logout' backgroundColor={colors.tertiary} />
         )}
         onPress={onLogout}
       />

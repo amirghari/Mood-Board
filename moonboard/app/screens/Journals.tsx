@@ -20,6 +20,13 @@ const randomImages = [
   require('../assets/journal6.jpg'),
   require('../assets/journal7.jpg'),
   require('../assets/journal8.jpg'),
+  require('../assets/journal10.jpg'),
+  require('../assets/journal12.jpg'),
+  require('../assets/journal13.jpg'),
+  require('../assets/journal14.jpg'),
+  require('../assets/journal15.jpg'), 
+  require('../assets/journal16.jpg'),
+  require('../assets/journal17.jpg'),
 ];
 
 const moods = [
