@@ -21,20 +21,26 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
 });
 
 // Create a new journal entry
-router.post('/', verifyToken, async (req: Request, res: Response) => {
-    const userId = (req as any).userId;
-    const { title, mood, entry_text } = req.body;
+router.post('/', async (req: Request, res: Response) => {
+    // For testing, use a dummy user ID if not provided
+    const userId = (req as any).userId || 1;
+    const { title, mood, entry_text, is_private } = req.body;
+    console.log('Journal POST: Received values:', { userId, title, mood, entry_text, is_private });
+    
     try {
-        const newJournal = await pool.query(
-            'INSERT INTO journal_entries (user_id, title, mood, entry_text) VALUES ($1, $2, $3, $4) RETURNING *',
-            [userId, title, mood, entry_text]
-        );
-        res.status(201).json(newJournal.rows[0]);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+      const newJournal = await pool.query(
+        'INSERT INTO journal_entries (user_id, title, mood, entry_text, is_private) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+        [userId, title, mood, entry_text, is_private]
+      );
+      console.log('Journal POST: Insert successful:', newJournal.rows[0]);
+      res.status(201).json(newJournal.rows[0]);
+    } catch (error: any) {
+      console.error('Journal POST: Server error:', error);
+      // Log the full error object as JSON
+      console.error('Detailed error:', JSON.stringify(error, null, 2));
+      res.status(500).json({ message: 'Server error', error: error.message });
     }
-});
+  });
 
 // Get a specific journal entry by ID
 router.get('/:id', verifyToken, async (req: Request, res: Response) => {

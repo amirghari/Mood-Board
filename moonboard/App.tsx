@@ -33,10 +33,10 @@ export default function App() {
 
   // Handle login/register completion
   const handleLogin = (newToken: string, userData: User) => {
-    console.log('App: handleLogin called with:', { newToken, userData });
+    console.log('App: handleLogin called with token:', newToken);
     setToken(newToken);
     setUser(userData);
-    setCurrentScreen('journals'); // Navigate to journals after login
+    setCurrentScreen('journals');
     setActiveTab('feed');
     console.log('App: State updated to journals with activeTab feed');
   };

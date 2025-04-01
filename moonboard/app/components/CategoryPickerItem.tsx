@@ -1,33 +1,31 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import Icon from '../components/Icon';
-import AppText from '../components/AppText';
-import { Props as BaseProps } from '../components/PickerItem';
+import colors from '../config/colors';
+import Icon from './Icon';
+import AppText from './AppText';
 
-interface Props extends BaseProps {
+interface Props {
     item: {
         label: string;
         value: number;
         backgroundColor: string;
         icon: keyof typeof MaterialCommunityIcons.glyphMap;
     };
+    onPress: () => void;
 }
 
 function CategoryPickerItem({ item, onPress }: Props) {
     return (
         <TouchableOpacity onPress={onPress}>
-
-        <View style={styles.container}>
-            <Icon backgroundColor={item.backgroundColor} name={item.icon} size={70} />
-            <AppText>{item.label}</AppText>
-        </View>
-       </TouchableOpacity>
-
+            <View style={styles.container}>
+                <Icon backgroundColor={item.backgroundColor} name={item.icon} size={70} />
+                <AppText>{item.label}</AppText>
+            </View>
+        </TouchableOpacity>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -37,4 +35,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default CategoryPickerItem;
+export default CategoryPickerItem; 
