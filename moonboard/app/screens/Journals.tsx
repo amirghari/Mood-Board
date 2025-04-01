@@ -22,9 +22,12 @@ const randomImages = [
 interface Props {
   token: string | null;
   onSelectJournal: (journal: any) => void;
+  user?: {
+    username: string;
+  }
 }
 
-export default function Journals({ token, onSelectJournal }: Props) {
+export default function Journals({ token, onSelectJournal, user }: Props) {
   const [journals, setJournals] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,12 +35,12 @@ export default function Journals({ token, onSelectJournal }: Props) {
   useEffect(() => {
     const fetchJournals = async () => {
       try {
-        const response = await axios.get(API_URL, {
+        const response = await axios.get(API_URL + (user ? '/user' : ''), {
           headers: {
             Authorization: token ? `Bearer ${token}` : '',
           },
         });
-        // Assign a random image to journals that have no image.
+        
         const processedData = response.data.map((journal: any) => {
           if (!journal.image) {
             const randomIndex = Math.floor(Math.random() * randomImages.length);
@@ -45,6 +48,7 @@ export default function Journals({ token, onSelectJournal }: Props) {
           }
           return journal;
         });
+        
         setJournals(processedData);
       } catch (err) {
         console.error('Error fetching journals:', err);
@@ -55,7 +59,7 @@ export default function Journals({ token, onSelectJournal }: Props) {
     };
 
     fetchJournals();
-  }, [token]);
+  }, [token, user]);
 
   if (loading) {
     return (

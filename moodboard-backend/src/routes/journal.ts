@@ -59,6 +59,21 @@ router.get('/:id', verifyToken, async (req: Request, res: Response) => {
     }
 });
 
+// Get all journal entries for the logged-in user
+router.get('/user', verifyToken, async (req: Request, res: Response) => {
+    const userId = (req as any).userId;
+    try {
+      const journals = await pool.query(
+        'SELECT * FROM journal_entries WHERE user_id = $1 ORDER BY created_at DESC',
+        [userId]
+      );
+      res.status(200).json(journals.rows);
+    } catch (error) {
+      console.error('Error fetching user journals:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
 // Update a journal entry
 router.put('/:id', verifyToken, async (req: Request, res: Response) => {
     const { id } = req.params;

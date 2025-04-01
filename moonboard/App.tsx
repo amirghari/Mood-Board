@@ -7,8 +7,8 @@ import WelcomeScreen from './app/screens/WelcomeScreen';
 import LoginScreen from './app/screens/LoginScreen';
 import JournalEditScreen from './app/screens/JournalEditScreen';
 import AccountScreen from './app/screens/AccountScreen';
-import Journals from './app/screens/Journals';
-import ListingDetailsScreen from './app/screens/ListingDetailsScreen'; // New details screen
+import MyJournals from './app/screens/Journals';
+import ListingDetailsScreen from './app/screens/ListingDetailsScreen';
 import BottomMenu from './app/components/BottomMenu';
 import colors from './app/config/colors';
 
@@ -27,35 +27,32 @@ interface Journal {
   created_at: string;
   image?: any;
   user_id: number;
+  username: string;
 }
 
 export default function App() {
-  // possible currentScreen values: 'welcome', 'login', 'journals', 'listing', 'journal', 'account'
-  const [currentScreen, setCurrentScreen] = useState('welcome');
+  const [currentScreen, setCurrentScreen] = useState('welcome'); // possible values: 'welcome', 'login', 'myjournals', 'listing', 'journal', 'account'
   const [isRegistering, setIsRegistering] = useState(false);
   const [activeTab, setActiveTab] = useState('feed');
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [selectedJournal, setSelectedJournal] = useState<Journal | null>(null);
 
-  // Handle welcome screen actions
   const handleWelcomeAction = (action: 'login' | 'register') => {
     console.log('App: handleWelcomeAction called with:', action);
     setIsRegistering(action === 'register');
     setCurrentScreen('login');
   };
 
-  // Handle login/register completion
   const handleLogin = (newToken: string, userData: User) => {
     console.log('App: handleLogin called with token:', newToken);
     setToken(newToken);
     setUser(userData);
-    setCurrentScreen('journals');
+    setCurrentScreen('myjournals'); // Navigate to MyJournals after login
     setActiveTab('feed');
-    console.log('App: State updated to journals with activeTab feed');
+    console.log('App: State updated to currentScreen = myjournals, activeTab = feed');
   };
 
-  // Handle logout
   const handleLogout = () => {
     console.log('App: handleLogout called');
     setToken(null);
@@ -63,23 +60,20 @@ export default function App() {
     setCurrentScreen('welcome');
   };
 
-  // Handle bottom menu navigation
   const handleTabPress = (tab: string) => {
     console.log('App: handleTabPress called with:', tab);
     setActiveTab(tab);
     setCurrentScreen(
-      tab === 'feed' ? 'journals' : tab === 'plus' ? 'journal' : 'account'
+      tab === 'feed' ? 'myjournals' : tab === 'plus' ? 'journal' : 'account'
     );
   };
 
-  // Handle selecting a journal to view details
   const handleSelectJournal = (journal: Journal) => {
     console.log('App: Journal selected:', journal);
     setSelectedJournal(journal);
     setCurrentScreen('listing');
   };
 
-  // Render the appropriate screen
   const renderScreen = () => {
     console.log('App: Rendering screen:', currentScreen);
     switch (currentScreen) {
@@ -92,11 +86,10 @@ export default function App() {
         );
       case 'login':
         return <LoginScreen onLogin={handleLogin} isRegistering={isRegistering} />;
-      case 'journals':
+      case 'myjournals':
         return (
           <View style={styles.mainContainer}>
-            {/* Pass onSelectJournal prop so that when a card is pressed, it calls this callback */}
-            <Journals token={token} onSelectJournal={handleSelectJournal} />
+            <MyJournals token={token} onSelectJournal={handleSelectJournal} />
             <BottomMenu activeTab={activeTab} onTabPress={handleTabPress} />
           </View>
         );
@@ -104,7 +97,7 @@ export default function App() {
         return (
           <ListingDetailsScreen
             journal={selectedJournal}
-            onBack={() => setCurrentScreen('journals')}
+            onBack={() => setCurrentScreen('myjournals')}
           />
         );
       case 'journal':
