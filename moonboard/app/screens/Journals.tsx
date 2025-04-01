@@ -4,6 +4,10 @@ import axios from 'axios';
 import Screen from '../components/Screen';
 import Card from '../components/Card';
 import colors from '../config/colors';
+import AppText from '../components/AppText';
+import MoodFilter from '../components/MoodFilter';
+import { useJournal } from '../hooks/useJournal';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const API_URL = 'http://172.20.10.2:5001/api/journal';
 
@@ -18,6 +22,15 @@ const randomImages = [
   require('../assets/journal8.jpg'),
 ];
 
+const moods = [
+  { label: 'Happy', value: 1, backgroundColor: colors.primary, icon: "emoticon-happy" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Sad', value: 2, backgroundColor: "#0A1D37", icon: "emoticon-sad" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Angry', value: 3, backgroundColor: "#DE3163", icon: "emoticon-angry" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Excited', value: 4, backgroundColor: colors.tertiary, icon: "emoticon-excited" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Neutral', value: 5, backgroundColor: "#D36B00", icon: "emoticon-neutral" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Stressed', value: 6, backgroundColor: "red", icon: "emoticon-cry" as keyof typeof MaterialCommunityIcons.glyphMap },
+];
+
 interface User {
   id: number; // Make sure it's a number
   username: string;
@@ -30,9 +43,9 @@ interface Props {
 }
 
 export default function Journals({ token, onSelectJournal, user }: Props) {
+  const { getJournals, loading, error } = useJournal();
   const [journals, setJournals] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [selectedMood, setSelectedMood] = useState<number | undefined>();
 
   useEffect(() => {
     const fetchJournals = async () => {
@@ -77,6 +90,17 @@ export default function Journals({ token, onSelectJournal, user }: Props) {
     fetchJournals();
   }, [token, user]);
 
+  const handleMoodSelect = (mood: number) => {
+    setSelectedMood(selectedMood === mood ? undefined : mood);
+  };
+
+  const filteredJournals = selectedMood
+    ? journals.filter(journal => {
+      const moodValue = moods.find(m => m.label === journal.mood)?.value;
+      return moodValue === selectedMood;
+    })
+    : journals;
+
   if (loading) {
     return (
       <Screen style={styles.container}>
@@ -88,15 +112,19 @@ export default function Journals({ token, onSelectJournal, user }: Props) {
   if (error) {
     return (
       <Screen style={styles.container}>
-        <Text style={styles.errorText}>{error}</Text>
+        <AppText style={styles.error}>{error}</AppText>
       </Screen>
     );
   }
 
   return (
     <Screen style={styles.container}>
+      <MoodFilter 
+        selectedMood={selectedMood}
+        onSelectMood={handleMoodSelect}
+      />
       <FlatList
-        data={journals}
+        data={filteredJournals}
         keyExtractor={(journal) => journal.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => onSelectJournal(item)}>
@@ -120,10 +148,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light,
     flex: 1,
   },
-  errorText: {
+  error: {
     color: colors.danger,
-    fontSize: 18,
     textAlign: 'center',
-    marginTop: 20,
   },
 });

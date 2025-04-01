@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     username: {
         color: colors.medium,
         fontSize: 14,
-        marginLeft: 15
     },
     moodInfo: {
         flexDirection: 'row',

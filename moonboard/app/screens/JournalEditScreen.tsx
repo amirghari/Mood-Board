@@ -13,12 +13,12 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 const moods = [
-  { label: 'Happy', value: 1, backgroundColor: colors.primary, icon: "emoticon-happy" as keyof typeof MaterialCommunityIcons.glyphMap },
-  { label: 'Sad', value: 2, backgroundColor: "#0A1D37", icon: "emoticon-sad" as keyof typeof MaterialCommunityIcons.glyphMap },
-  { label: 'Angry', value: 3, backgroundColor: "#DE3163", icon: "emoticon-angry" as keyof typeof MaterialCommunityIcons.glyphMap },
-  { label: 'Excited', value: 4, backgroundColor: colors.tertiary, icon: "emoticon-excited" as keyof typeof MaterialCommunityIcons.glyphMap },
-  { label: 'Neutral', value: 5, backgroundColor: "#D36B00", icon: "emoticon-neutral" as keyof typeof MaterialCommunityIcons.glyphMap },
-  { label: 'Stressed', value: 6, backgroundColor: "red", icon: "emoticon-cry" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Glowing', value: 1, backgroundColor: "#f6c65b" , icon: "emoticon-happy" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Low', value: 2, backgroundColor: "#7d8ca3", icon: "emoticon-sad" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Fired Up', value: 3, backgroundColor: "#b5523a", icon: "emoticon-angry" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Energized', value: 4, backgroundColor: "#f79256", icon: "emoticon-excited" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Balanced', value: 5, backgroundColor: "#b3a89f", icon: "emoticon-neutral" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Tense', value: 6, backgroundColor: "#9b6a6c", icon: "emoticon-cry" as keyof typeof MaterialCommunityIcons.glyphMap },
 ];
 
 // Transform the "mood" field: if it's an object, extract its "value" property.
@@ -49,22 +49,22 @@ export default function JournalEditScreen({ onBack, token }: Props) {
       
       switch(moodValue) {
         case 1:
-          processedMood = 'Happy';
+          processedMood = 'Glowing';
           break;
         case 2:
-          processedMood = 'Sad';
+          processedMood = 'Low';
           break;
         case 3:
-          processedMood = 'Angry';
+          processedMood = 'Fired Up';
           break;
         case 4:
-          processedMood = 'Excited';
+          processedMood = 'Energized';
           break;
         case 5:
-          processedMood = 'Neutral';
+          processedMood = 'Balanced';
           break;
         case 6:
-          processedMood = 'Stressed';
+          processedMood = 'Tense';
           break;
         default:
           processedMood = '';
