@@ -1,6 +1,6 @@
 // app/screens/JournalEditScreen.tsx
 import React from 'react';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import * as Yup from 'yup';
 import Screen from '../components/Screen';
 import { AppForm, AppFormField, SubmitButton, AppFormPicker } from '../components/forms';
@@ -9,13 +9,17 @@ import AppText from '../components/AppText';
 import colors from '../config/colors';
 import { useJournal } from '../hooks/useJournal';
 import CategoryPickerItem from '../components/CategoryPickerItem';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import BackButton from '../components/BackButton';
 
 
 const moods = [
-  { label: 'Happy', value: 'happy', backgroundColor: colors.primary, icon: "emoticon-happy" },
-  { label: 'Sad', value: 'sad', backgroundColor: colors.secondary, icon: "emoticon-sad" },
-  { label: 'Angry', value: 'angry', backgroundColor: colors.danger, icon: "emoticon-angry" },
-  { label: 'Excited', value: 'excited', backgroundColor: colors.primary, icon: "emoticon-excited" },
+  { label: 'Happy', value: 1, backgroundColor: colors.primary, icon: "emoticon-happy" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Sad', value: 2, backgroundColor: "blue", icon: "emoticon-sad" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Angry', value: 3, backgroundColor: colors.danger, icon: "emoticon-angry" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Excited', value: 4, backgroundColor: "purple", icon: "emoticon-excited" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Neutral', value: 5, backgroundColor: colors.medium, icon: "emoticon-neutral" as keyof typeof MaterialCommunityIcons.glyphMap },
+  { label: 'Stressed', value: 6, backgroundColor: "red", icon: "emoticon-cry" as keyof typeof MaterialCommunityIcons.glyphMap },
 ];
 
 // Transform the "mood" field: if it's an object, extract its "value" property.
@@ -66,7 +70,10 @@ export default function JournalEditScreen({ onBack, token }: Props) {
 
   return (
     <Screen style={styles.container}>
-      <AppText style={styles.title}>New Journal Entry</AppText>
+      <View style={styles.header}>
+        <BackButton onPress={onBack} />
+        <AppText style={styles.title}>New Journal Entry</AppText>
+      </View>
       <AppForm
         initialValues={{
           title: '',
@@ -85,7 +92,7 @@ export default function JournalEditScreen({ onBack, token }: Props) {
             placeholder="Select Mood"
             PickerItemComponent={CategoryPickerItem}
           />
-          <AppFormField
+          <AppFormField style={{height: 300}}
             name="entry_text"
             placeholder="Write your journal entry here..."
             icon="pencil"
@@ -110,11 +117,17 @@ const styles = StyleSheet.create({
     padding: 10,
     marginHorizontal: 10,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
     textAlign: 'center',
+    flex: 1,
+    marginRight: 40, // To center the title accounting for the back button
   },
   error: {
     color: colors.danger,

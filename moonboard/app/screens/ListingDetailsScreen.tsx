@@ -102,8 +102,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.medium,
     position: 'absolute',
-    bottom:-8 ,
-    left: 28
+    bottom:-20 ,
+    left: 50
   },
   userContainer: {
     marginVertical: 20,

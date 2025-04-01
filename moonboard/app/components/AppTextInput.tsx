@@ -6,14 +6,19 @@ import colors from '../config/colors';
 import defaultStyles from '../config/styles';
 interface Props {
     icon: keyof typeof MaterialCommunityIcons.glyphMap;
+    style?: any;
     [key: string]: any;
 }
 
-function AppTextInput({icon, ...otherProps}: Props) {
+function AppTextInput({icon, style, ...otherProps}: Props) {
     return (
         <View style={styles.container}>
             <MaterialCommunityIcons name={icon} size={20} color={colors.medium} style={styles.icon} />
-            <TextInput placeholderTextColor={colors.medium} style={[defaultStyles.text, styles.textInput]} {...otherProps}  />
+            <TextInput 
+                placeholderTextColor={colors.medium} 
+                style={[defaultStyles.text, styles.textInput, style]} 
+                {...otherProps}  
+            />
         </View>
     );
 }
@@ -26,13 +31,20 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 15,
         marginVertical: 10,
-        alignItems: 'center'
+        alignItems: 'flex-start'
     },
     icon: {
-        marginRight: 10
+        marginRight: 10,
+        marginTop: 8
     },
     textInput: {
-        flex: 1
+        flex: 1,
+        fontSize: 16,
+        fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Avenir',
+        paddingTop: 10,
+        paddingBottom: 0,
+        textAlignVertical: 'top',
+        minHeight: 40
     }
 })
 
