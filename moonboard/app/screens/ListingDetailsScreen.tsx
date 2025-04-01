@@ -6,6 +6,7 @@ import AppText from '../components/AppText';
 import AppButton from '../components/AppButton';
 import Screen from '../components/Screen';
 import colors from '../config/colors';
+import BackButton from '../components/BackButton';
 
 interface Journal {
   id: number;
@@ -38,7 +39,7 @@ export default function ListingDetailsScreen({ journal, onBack }: Props) {
   return (
     <Screen>
       <View style={styles.headerContainer}>
-        <AppButton title="Back" onPress={onBack} color="primary" />
+        <BackButton onPress={onBack} />
       </View>
       <ScrollView>
         <Image
@@ -49,16 +50,18 @@ export default function ListingDetailsScreen({ journal, onBack }: Props) {
           <AppText style={styles.title}>{journal.title}</AppText>
           <AppText style={styles.mood}>{`Mood: ${journal.mood}`}</AppText>
           <AppText style={styles.body}>{journal.entry_text}</AppText>
-          <AppText style={styles.info}>
-            {`Created at: ${new Date(journal.created_at).toLocaleString()}`}
-          </AppText>
           <View style={styles.userContainer}>
             <ListItem 
               image={require("../assets/user.png")}
               title={journal.name}
               subTitle={`User Name: ${journal.username}`}
             />
+            <AppText style={styles.info}>
+            {`Created at: ${new Date(journal.created_at).toLocaleString()}`}
+          </AppText>
           </View>
+          
+          
         </View>
       </ScrollView>
     </Screen>
@@ -69,8 +72,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     padding: 10,
     width: '30%',
-    height: '13%',
-  },
+},
   image: {
     width: '100%',
     height: 340,
@@ -94,12 +96,14 @@ const styles = StyleSheet.create({
   },
   body: {
     fontSize: 18,
-    marginVertical: 10,
+    marginVertical: 40,
   },
   info: {
     fontSize: 16,
-    color: colors.dark,
-    marginVertical: 5,
+    color: colors.medium,
+    position: 'absolute',
+    bottom:-8 ,
+    left: 28
   },
   userContainer: {
     marginVertical: 20,
