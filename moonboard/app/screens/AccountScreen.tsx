@@ -3,7 +3,6 @@ import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import Icon from '../components/Icon';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
 import Screen from '../components/Screen';
 import ListItem from '../components/ListItem';
 import colors from '../config/colors';
@@ -19,15 +18,15 @@ const menuItems = [
 ];
 
 interface Props {
-  onEdit: () => void;
+  onUserJournals: () => void; // Instead of onEdit
   onLogout: () => void;
   user: {
     name: string;
     username: string;
-  }
+  };
 }
 
-function AccountScreen({ onEdit, onLogout, user }: Props) {
+function AccountScreen({ onUserJournals, onLogout, user }: Props) {
   return (
     <Screen>
       <View style={styles.container}>
@@ -52,7 +51,7 @@ function AccountScreen({ onEdit, onLogout, user }: Props) {
                   backgroundColor={item.icon.backgroundColor}
                 />
               )}
-              onPress={onEdit}
+              onPress={onUserJournals} // Press => go to MyJournals with user prop
             />
           )}
         />

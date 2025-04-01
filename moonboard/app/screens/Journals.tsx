@@ -1,4 +1,3 @@
-// app/screens/Journals.tsx
 import React, { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, ActivityIndicator, Text, TouchableOpacity } from 'react-native';
 import axios from 'axios';
@@ -19,12 +18,15 @@ const randomImages = [
   require('../assets/journal8.jpg'),
 ];
 
+interface User {
+  id: number; // Make sure it's a number
+  username: string;
+}
+
 interface Props {
   token: string | null;
   onSelectJournal: (journal: any) => void;
-  user?: {
-    username: string;
-  }
+  user?: User; // optional
 }
 
 export default function Journals({ token, onSelectJournal, user }: Props) {
@@ -35,20 +37,28 @@ export default function Journals({ token, onSelectJournal, user }: Props) {
   useEffect(() => {
     const fetchJournals = async () => {
       try {
-        const response = await axios.get(API_URL + (user ? '/user' : ''), {
+        // If user is provided, fetch /user
+        // If not, fetch the base route
+        const endpoint = user ? '/user' : '';
+        console.log(`Fetching from: ${API_URL + endpoint}`);
+        const response = await axios.get(API_URL + endpoint, {
           headers: {
             Authorization: token ? `Bearer ${token}` : '',
           },
         });
-        
-        const processedData = response.data.map((journal: any) => {
+
+        const processedData = response.data.map((journal: any, index: number) => {
+          if (!journal.id) {
+            console.warn(`Missing "id", fallback key for index ${index}`);
+            journal.id = `fallback-${index}`;
+          }
           if (!journal.image) {
-            const randomIndex = Math.floor(Math.random() * randomImages.length);
-            return { ...journal, image: randomImages[randomIndex] };
+            const rnd = Math.floor(Math.random() * randomImages.length);
+            journal.image = randomImages[rnd];
           }
           return journal;
         });
-        
+
         setJournals(processedData);
       } catch (err) {
         console.error('Error fetching journals:', err);
