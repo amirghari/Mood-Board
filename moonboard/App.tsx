@@ -31,8 +31,7 @@ interface Journal {
 }
 
 export default function App() {
-  // possible screen states: 'welcome', 'login', 'myjournals', 'myjournalsuser', 'listing', 'journal', 'account'
-  const [currentScreen, setCurrentScreen] = useState('welcome');
+  const [currentScreen, setCurrentScreen] = useState('welcome'); // possible values: 'welcome', 'login', 'myjournals', 'listing', 'journal', 'account'
   const [isRegistering, setIsRegistering] = useState(false);
   const [activeTab, setActiveTab] = useState('feed');
   const [token, setToken] = useState<string | null>(null);
@@ -40,24 +39,29 @@ export default function App() {
   const [selectedJournal, setSelectedJournal] = useState<Journal | null>(null);
 
   const handleWelcomeAction = (action: 'login' | 'register') => {
+    console.log('App: handleWelcomeAction called with:', action);
     setIsRegistering(action === 'register');
     setCurrentScreen('login');
   };
 
   const handleLogin = (newToken: string, userData: User) => {
+    console.log('App: handleLogin called with token:', newToken);
     setToken(newToken);
     setUser(userData);
-    setCurrentScreen('myjournals'); // By default, let's show all journals or user journnals?
+    setCurrentScreen('myjournals'); // Navigate to MyJournals after login
     setActiveTab('feed');
+    console.log('App: State updated to currentScreen = myjournals, activeTab = feed');
   };
 
   const handleLogout = () => {
+    console.log('App: handleLogout called');
     setToken(null);
     setUser(null);
     setCurrentScreen('welcome');
   };
 
   const handleTabPress = (tab: string) => {
+    console.log('App: handleTabPress called with:', tab);
     setActiveTab(tab);
     setCurrentScreen(
       tab === 'feed' ? 'myjournals' : tab === 'plus' ? 'journal' : 'account'
@@ -65,16 +69,13 @@ export default function App() {
   };
 
   const handleSelectJournal = (journal: Journal) => {
+    console.log('App: Journal selected:', journal);
     setSelectedJournal(journal);
     setCurrentScreen('listing');
   };
 
-  // Called from the AccountScreen "My Journals" item
-  const handleUserJournals = () => {
-    setCurrentScreen('myjournalsuser');
-  };
-
   const renderScreen = () => {
+    console.log('App: Rendering screen:', currentScreen);
     switch (currentScreen) {
       case 'welcome':
         return (
@@ -85,30 +86,13 @@ export default function App() {
         );
       case 'login':
         return <LoginScreen onLogin={handleLogin} isRegistering={isRegistering} />;
-
       case 'myjournals':
-        // This might display all journals or some default set (the code you already have).
         return (
           <View style={styles.mainContainer}>
             <MyJournals token={token} onSelectJournal={handleSelectJournal} />
             <BottomMenu activeTab={activeTab} onTabPress={handleTabPress} />
           </View>
         );
-
-      case 'myjournalsuser':
-        // Pass user for filtering your user's journals. 
-        return (
-          <View style={styles.mainContainer}>
-            {/* Here we pass user as a prop so Journals fetches from /api/journal/user */}
-            <MyJournals 
-              token={token} 
-              user={user} 
-              onSelectJournal={handleSelectJournal} 
-            />
-            <BottomMenu activeTab={activeTab} onTabPress={handleTabPress} />
-          </View>
-        );
-
       case 'listing':
         return (
           <ListingDetailsScreen
@@ -126,11 +110,7 @@ export default function App() {
       case 'account':
         return (
           <View style={styles.mainContainer}>
-            <AccountScreen
-              onUserJournals={handleUserJournals} // new callback
-              onLogout={handleLogout}
-              user={user}
-            />
+            <AccountScreen onEdit={() => handleTabPress('plus')} onLogout={handleLogout} user={user} />
             <BottomMenu activeTab={activeTab} onTabPress={handleTabPress} />
           </View>
         );
