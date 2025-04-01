@@ -41,12 +41,16 @@ export default function Journals({ token, onSelectJournal, user }: Props) {
         // If not, fetch the base route
         const endpoint = user ? '/user' : '';
         console.log(`Fetching from: ${API_URL + endpoint}`);
+        console.log('With token:', token ? 'Token present' : 'No token');
+        console.log('User:', user);
+        
         const response = await axios.get(API_URL + endpoint, {
           headers: {
             Authorization: token ? `Bearer ${token}` : '',
           },
         });
 
+        console.log('Response received:', response.data);
         const processedData = response.data.map((journal: any, index: number) => {
           if (!journal.id) {
             console.warn(`Missing "id", fallback key for index ${index}`);
@@ -60,9 +64,11 @@ export default function Journals({ token, onSelectJournal, user }: Props) {
         });
 
         setJournals(processedData);
-      } catch (err) {
+      } catch (err: any) {
         console.error('Error fetching journals:', err);
-        setError('Error fetching journals');
+        console.error('Error response:', err.response?.data);
+        console.error('Error status:', err.response?.status);
+        setError(err.response?.data?.message || 'Error fetching journals');
       } finally {
         setLoading(false);
       }

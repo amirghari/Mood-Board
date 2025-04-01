@@ -74,6 +74,11 @@ export default function App() {
     setCurrentScreen('listing');
   };
 
+  const handleUserJournals = () => {
+    console.log('App: handleUserJournals called');
+    setCurrentScreen('myjournalsuser');
+  };
+
   const renderScreen = () => {
     console.log('App: Rendering screen:', currentScreen);
     switch (currentScreen) {
@@ -110,7 +115,18 @@ export default function App() {
       case 'account':
         return (
           <View style={styles.mainContainer}>
-            <AccountScreen onEdit={() => handleTabPress('plus')} onLogout={handleLogout} user={user} />
+            <AccountScreen 
+              onUserJournals={handleUserJournals} 
+              onLogout={handleLogout} 
+              user={user} 
+            />
+            <BottomMenu activeTab={activeTab} onTabPress={handleTabPress} />
+          </View>
+        );
+      case 'myjournalsuser':
+        return (
+          <View style={styles.mainContainer}>
+            <MyJournals token={token} user={user} onSelectJournal={handleSelectJournal} />
             <BottomMenu activeTab={activeTab} onTabPress={handleTabPress} />
           </View>
         );

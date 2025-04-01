@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageSourcePropType, View, StyleSheet, Image, TouchableHighlight } from 'react-native';
+import { ImageSourcePropType, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 
 import AppText from './AppText';
@@ -17,7 +17,7 @@ interface Props {
 function ListItem({title, subTitle, image, IconComponent, onPress, renderRightActions}: Props) {
     return (
         <Swipeable renderRightActions={renderRightActions}>
-            <TouchableHighlight underlayColor={colors.white} onPress={onPress}>
+            <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
                 <View style={styles.container}>
                     {IconComponent && <IconComponent />}
                     {image && <Image style={styles.image} source={image} />}
@@ -26,7 +26,7 @@ function ListItem({title, subTitle, image, IconComponent, onPress, renderRightAc
                         {subTitle && <AppText style={styles.subTitle}>{subTitle}</AppText>}
                     </View>
                 </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
         </Swipeable>
     );
 }

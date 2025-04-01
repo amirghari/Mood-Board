@@ -23,6 +23,54 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
     }
   });
 
+// Get all journal entries for the logged-in user
+router.get('/user', verifyToken, async (req: Request, res: Response) => {
+  const userId = Number((req as any).userId);
+  console.log('/user route: userId =', userId, 'type:', typeof userId); // Debug
+
+  try {
+    // First verify the user exists
+    const userCheck = await pool.query('SELECT id FROM users WHERE id = $1', [userId]);
+    if (userCheck.rows.length === 0) {
+      console.error('User not found:', userId);
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+
+    const query = `
+      SELECT j.*, u.username, u.name 
+      FROM journal_entries j
+      JOIN users u ON j.user_id = u.id
+      WHERE j.user_id = $1
+      ORDER BY j.created_at DESC
+    `;
+    const journals = await pool.query(query, [userId]);
+    res.status(200).json(journals.rows);
+  } catch (error: any) {
+
+    res.status(500).json({ 
+      message: 'Server error',
+      details: error.message 
+    });
+  }
+});
+
+// Get a specific journal entry by ID
+router.get('/:id', verifyToken, async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const journal = await pool.query('SELECT * FROM journal_entries WHERE id = $1', [id]);
+        if (journal.rows.length === 0) {
+            res.status(404).json({ message: 'Journal entry not found' });
+            return;
+        }
+        res.status(200).json(journal.rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Create a new journal entry
 router.post('/', verifyToken, async (req: Request, res: Response) => {
     // Now that verifyToken is attached, req.userId should contain the correct user id
@@ -42,41 +90,6 @@ router.post('/', verifyToken, async (req: Request, res: Response) => {
       res.status(500).json({ message: 'Server error', error: error.message });
     }
   });
-
-// Get a specific journal entry by ID
-router.get('/:id', verifyToken, async (req: Request, res: Response) => {
-    const { id } = req.params;
-    try {
-        const journal = await pool.query('SELECT * FROM journal_entries WHERE id = $1', [id]);
-        if (journal.rows.length === 0) {
-            res.status(404).json({ message: 'Journal entry not found' });
-            return;
-        }
-        res.status(200).json(journal.rows[0]);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
-// Get all journal entries for the logged-in user
-
-router.get('/user', verifyToken, async (req, res) => {
-  // "verifyToken" should set (req as any).userId = numeric ID from the token
-  const userId = (req as any).userId;
-  console.log('/user route: userId =', userId); // Debug
-
-  try {
-    const journals = await pool.query(
-      'SELECT * FROM journal_entries WHERE user_id = $1 ORDER BY created_at DESC',
-      [userId]
-    );
-    res.status(200).json(journals.rows);
-  } catch (error) {
-    console.error('Error fetching user journals:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
 
 // Update a journal entry
 router.put('/:id', verifyToken, async (req: Request, res: Response) => {

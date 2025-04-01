@@ -9,7 +9,7 @@ interface Props {
 
 function WelcomeScreen({ onLogin, onRegister }: Props) {
     return (
-        <ImageBackground blurRadius={1} style={styles.background} source={require("../assets/background1.jpg")}>
+        <ImageBackground blurRadius={3} style={styles.background} source={require("../assets/background1.jpg")}>
             <SafeAreaView style={styles.container}>
                 <View style={styles.logoContainer}>
                     <Image style={styles.logo} source={require("../assets/logo.png")} />
