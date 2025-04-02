@@ -103,9 +103,32 @@ export default function Journals({ token, onSelectJournal, user }: Props) {
 
   const filteredJournals = selectedMood
     ? journals.filter(journal => {
-      const moodValue = moods.find(m => m.label === journal.mood)?.value;
-      return moodValue === selectedMood;
-    })
+        // Convert the mood label to match the database value
+        let processedMood = '';
+        switch(selectedMood) {
+          case 1:
+            processedMood = 'Glowing';
+            break;
+          case 2:
+            processedMood = 'Low';
+            break;
+          case 3:
+            processedMood = 'Fired Up';
+            break;
+          case 4:
+            processedMood = 'Energized';
+            break;
+          case 5:
+            processedMood = 'Balanced';
+            break;
+          case 6:
+            processedMood = 'Tense';
+            break;
+          default:
+            processedMood = '';
+        }
+        return journal.mood === processedMood;
+      })
     : journals;
 
   if (loading) {
