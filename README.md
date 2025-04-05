@@ -33,7 +33,7 @@ Moonboard uses JSON Web Tokens (JWT) for authentication. When a user registers o
 - **PostgreSQL:** Database for storing user data, journals, moodboards, likes, and comments.
 - **Express:** Node.js web framework for building the REST API.
 - **React Native:** Framework for building native mobile apps.
-- **Node.js:** Typescript runtime for the backend.
+- **Node.js:** Javascript runtime for the backend.
 - **TypeScript:** Provides type safety on both the front and back end.
 - **Yup:** Form validation library.
 - **bcrypt:** Password hashing.
