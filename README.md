@@ -1,4 +1,4 @@
-# Moonboard
+# Moodboard
 
 Moonboard is a mobile application built on the PERN (PostgreSQL, Express, React Native, Node.js) stack that allows users to capture, track, and share their daily moods and journal entries. The app combines creative expression with robust backend storage, offering features such as authentication, journal creation, mood tracking, and social interactions.
 
