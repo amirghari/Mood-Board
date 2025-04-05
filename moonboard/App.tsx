@@ -81,6 +81,7 @@ export default function App() {
 
   const renderScreen = () => {
     console.log('App: Rendering screen:', currentScreen);
+    console.log('DATABASE_URL:', process.env.DATABASE_URL);
     switch (currentScreen) {
       case 'welcome':
         return (

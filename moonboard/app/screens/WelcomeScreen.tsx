@@ -7,7 +7,7 @@ interface Props {
     onRegister: () => void;
 }
 
-function WelcomeScreen({ onLogin, onRegister }: Props) {
+function WelcomeScreen({ onLogin }: Props) {
     return (
         <ImageBackground blurRadius={3} style={styles.background} source={require("../assets/background1.jpg")}>
             <SafeAreaView style={styles.container}>

@@ -29,15 +29,6 @@ const randomImages = [
   require('../assets/journal17.jpg'),
 ];
 
-const moods = [
-  { label: 'Happy', value: 1, backgroundColor: colors.primary, icon: "emoticon-happy" as keyof typeof MaterialCommunityIcons.glyphMap },
-  { label: 'Sad', value: 2, backgroundColor: "#0A1D37", icon: "emoticon-sad" as keyof typeof MaterialCommunityIcons.glyphMap },
-  { label: 'Angry', value: 3, backgroundColor: "#DE3163", icon: "emoticon-angry" as keyof typeof MaterialCommunityIcons.glyphMap },
-  { label: 'Excited', value: 4, backgroundColor: colors.tertiary, icon: "emoticon-excited" as keyof typeof MaterialCommunityIcons.glyphMap },
-  { label: 'Neutral', value: 5, backgroundColor: "#D36B00", icon: "emoticon-neutral" as keyof typeof MaterialCommunityIcons.glyphMap },
-  { label: 'Stressed', value: 6, backgroundColor: "red", icon: "emoticon-cry" as keyof typeof MaterialCommunityIcons.glyphMap },
-];
-
 interface User {
   id: number; // Make sure it's a number
   username: string;
