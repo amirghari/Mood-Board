@@ -46,8 +46,8 @@ Below are screenshots from the Moonboard UI, arranged in two columns:
 
 | <img src="/moonboard/app/assets/1.png" width="250" alt="Screenshot 1"/> | <img src="/moonboard/app/assets/2.png" width="250" alt="Screenshot 2"/> |
 | ----------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| <img src="/moonboard/app/assets/3.png" width="250" alt="Screenshot 3"/> | <img src="/moonboard/app/assets/4.png" width="250" alt="Screenshot 4"/> |
-| <img src="/moonboard/app/assets/5.png" width="250" alt="Screenshot 5"/> |                                                                         |
+| <img src="/moonboard/app/assets/3.png" width="250" alt="Screenshot 3"/> | <img src="/moonboard/app/assets/6.png" width="250" alt="Screenshot 6"/> |
+| <img src="/moonboard/app/assets/4.png" width="250" alt="Screenshot 4"/> | <img src="/moonboard/app/assets/5.png" width="250" alt="Screenshot 5"/> |
 
 ## Setup and Installation
 
